@@ -16,6 +16,10 @@ private:
 
     void loadAreas();
     bool step();
+    void handleUserInput();
+    void moveTo(const std::string& dir);
+    void printHelp();
+
 };
 
 
