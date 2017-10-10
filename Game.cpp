@@ -50,7 +50,6 @@ void Game::printHelp() {
 void Game::moveDirection(int dir) {
     if (areas[player.getPosition()].getValidDirs()[dir] != -1) {
         player.setPosition(areas[player.getPosition()].getValidDirs()[dir]);
-        run();
     } else {
         std::cout << "Not valid direction" << std::endl;
     }
@@ -69,7 +68,7 @@ void Game::moveTo(const std::string& dir) {
     } else if (dir == "w" || dir == "west") {
         Game::moveDirection(3);
     }
-    run();
+    return;
 }
 
 std::string Game::removeWhitespace(std::string str) {
@@ -164,10 +163,10 @@ void Game::handleUserInput() {
 
     if (firstWord == "h" || firstWord == "help") {
         printHelp();
-        Game::handleUserInput();
+        return;
     } else if (firstWord == "g" || firstWord == "go") {
         Game::moveTo(restWords);
-        Game::handleUserInput();
+        return;
     }
 
 }
@@ -199,7 +198,16 @@ void Game::printItemsInRoom(std::vector<Item> items) {
 
 void Game::run()
 {
-    while(!step()) {
+    printHelp();
+    do {
+
+    } while ( !step() );
+    std::cout<<"Congratulations, you have reached the End room and won the game!"<<std::endl;
+}
+
+//TODO refactor step
+bool Game::step() {
+    do {
         int pos = player.getPosition();
         std::cout<<"You are now in room nr "<<areas[pos].getName()<<", "<<areas[pos].getDescription()<< std::endl;
         printItemsInRoom(getItems(pos));
@@ -216,18 +224,9 @@ void Game::run()
             }
         }
         std::cout<<dir<<std::endl;
-        printHelp();
         //TODO refactor infinit while true loop
-        while(true) {
-            handleUserInput();
-        }
-        break;
-    }
-}
-
-//TODO refactor step
-bool Game::step()
-{
-    return false;
+        handleUserInput();
+    } while (player.getPosition() != 6);
+    return true;
 }
 
