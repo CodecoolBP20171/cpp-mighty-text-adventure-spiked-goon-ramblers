@@ -139,6 +139,7 @@ void Game::handleUserInput() {
         if (restWords != "") {
             std::cout<<"restWords "<<restWords<<std::endl;
         }
+        //TODO inventory
         std::vector<std::string> validFirstWords = {"h", "help",
                                                     "g", "go",
                                                     "u", "use",
@@ -172,6 +173,7 @@ void Game::handleUserInput() {
 
 void Game::run()
 {
+    do
     while(!step()) {
         int pos = player.getPosition();
         std::cout<<"You are now in room nr "<<areas[pos].getName()<<", "<<areas[pos].getDescription()<< std::endl;
