@@ -37,6 +37,12 @@ void Game::loadAreas()
 void Game::printHelp() {
     std::cout<<"Help: you can use case insensitive 'h' or 'help' for this message, or"<<std::endl;
     std::cout<<"'g' or 'go' n/north/e/east/s/south/w/west to go to the given direction or"<<std::endl;
+    std::cout<<"'u' or 'use' or"<<std::endl;
+    std::cout<<"'e' or 'eat' or"<<std::endl;
+    std::cout<<"'f' or 'fight' or"<<std::endl;
+    std::cout<<"'p' or 'pickup' or"<<std::endl;
+    std::cout<<"'d' or 'drop' or"<<std::endl;
+    std::cout<<"'x' or 'exit' or"<<std::endl;
     std::cout<<"..."<<std::endl;
 }
 
@@ -133,12 +139,14 @@ void Game::handleUserInput() {
         if (restWords != "") {
             std::cout<<"restWords "<<restWords<<std::endl;
         }
-        //TODO x/exit, p/pick, d/drop
         std::vector<std::string> validFirstWords = {"h", "help",
                                                     "g", "go",
                                                     "u", "use",
                                                     "e", "eat",
-                                                    "f", "fight"};
+                                                    "f", "fight",
+                                                    "x", "exit",
+                                                    "p", "pickup",
+                                                    "d", "drop"};
 
         for (std::string word : validFirstWords) {
             if (firstWord == word) {
