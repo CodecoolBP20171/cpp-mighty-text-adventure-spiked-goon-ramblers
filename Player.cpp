@@ -4,5 +4,21 @@
 
 #include "Player.h"
 
-int Player::getPosition() const { return position;}
-void Player::setPosition(int pos) { position = pos;}
+Player::Player() {
+
+};
+
+int Player::getPosition() const { return position; }
+void Player::setPosition(int pos) { position = pos; }
+Inventory* Player::getInventory() { return inventory; }
+void Player::showInventory() {
+    std::cout<<"Inventory: ";
+    if (inventory->getItems().size() == 0) {
+        std::cout<<"empty";
+    }
+    //TODO show size/remaining space
+    for (Item item: inventory->getItems() ) {
+        std::cout<<item.getName()<<" ";
+    }
+    std::cout<<std::endl;
+}

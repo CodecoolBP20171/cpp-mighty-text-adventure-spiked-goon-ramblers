@@ -136,10 +136,10 @@ void Game::handleUserInput() {
             restWords = lowerInput.substr(spacePos+1, lowerInput.size());
             restWords = Game::removeWhitespace(restWords);
         }
-        std::cout<<"firstWord "<<firstWord<<std::endl;
+        /*std::cout<<"firstWord "<<firstWord<<std::endl;
         if (restWords != "") {
             std::cout<<"restWords "<<restWords<<std::endl;
-        }
+        }*/
         std::vector<std::string> validFirstWords = {"h", "help",
                                                     "g", "go",
                                                     "u", "use",
@@ -147,11 +147,11 @@ void Game::handleUserInput() {
                                                     "f", "fight",
                                                     "x", "exit",
                                                     "p", "pickup",
-                                                    "d", "drop"
+                                                    "d", "drop",
                                                     "i", "inventory"};
         for (std::string word : validFirstWords) {
             if (firstWord == word) {
-                std::cout << "Valid first word" << std::endl;
+                //std::cout << "Valid first word" << std::endl;
                 isValidFirstWord = true;
                 break;
             }
@@ -167,17 +167,38 @@ void Game::handleUserInput() {
     } else if (firstWord == "g" || firstWord == "go") {
         Game::moveTo(restWords);
         return;
+    } else if (firstWord == "p" || firstWord == "pickup") {
+        //TODO make separate function for pickup
+        for (auto &item : items){
+            if (item.getName() == restWords) {
+                if (item.getPosition() == player.getPosition()) {
+                    player.getInventory()->pickUpItem(item);
+                   /* ///////
+                    std::cout<<"Item pos before "<<item.getPosition()<<std::endl;
+                    item.setPosition(-1);
+                    std::cout<<"Item pos after "<<item.getPosition()<<std::endl;
+                    ///////*/
+                    std::cout<<item.getName()<<" picked up."<<std::endl;
+                    player.showInventory();
+                    break;
+                }
+                std::cout<<"No "<<item.getName()<<" in this room."<<std::endl;
+                break;
+            }
+            std::cout<<"No "<<restWords<<" in the room."<<std::endl;
+        }
+    } else if (firstWord == "i" || firstWord == "inventory") {
+        player.showInventory();
     }
-
 }
 
 void Game::createItem() {
-    items.emplace_back("Key", 3, 2);
+    items.emplace_back("key", 3, 2);
 }
 
 std::vector<Item> Game::getItems(int& pos) const {
     std::vector<Item> itemsInRoom;
-    for (Item item : items) {
+    for (auto &item : items) {
         if (item.getPosition() == pos) {
             itemsInRoom.emplace_back(item);
         }

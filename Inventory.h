@@ -13,7 +13,7 @@
 class Inventory {
 
 public:
-    Inventory(const int& capacity);
+    Inventory(int);
 
     std::vector<Item> getItems() const;
 
@@ -24,7 +24,7 @@ public:
 private:
     int capacity;
     int weight;
-    std::vector<Item> items;
+    std::vector<Item> inventoryItems;
 };
 
 

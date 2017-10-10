@@ -4,6 +4,7 @@
 #include <vector>
 #include "Area.hpp"
 #include "Item.h"
+#include "Inventory.h"
 
 using namespace std;
 
