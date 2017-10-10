@@ -43,6 +43,7 @@ void Game::printHelp() {
     std::cout<<"'f' or 'fight' or"<<std::endl;
     std::cout<<"'p' or 'pickup' or"<<std::endl;
     std::cout<<"'d' or 'drop' or"<<std::endl;
+    std::cout<<"'i' or 'inventory' or"<<std::endl;
     std::cout<<"'x' or 'exit' or"<<std::endl;
     std::cout<<"..."<<std::endl;
 }
@@ -139,7 +140,6 @@ void Game::handleUserInput() {
         if (restWords != "") {
             std::cout<<"restWords "<<restWords<<std::endl;
         }
-        //TODO inventory
         std::vector<std::string> validFirstWords = {"h", "help",
                                                     "g", "go",
                                                     "u", "use",
@@ -147,8 +147,8 @@ void Game::handleUserInput() {
                                                     "f", "fight",
                                                     "x", "exit",
                                                     "p", "pickup",
-                                                    "d", "drop"};
-
+                                                    "d", "drop"
+                                                    "i", "inventory"};
         for (std::string word : validFirstWords) {
             if (firstWord == word) {
                 std::cout << "Valid first word" << std::endl;
@@ -205,7 +205,6 @@ void Game::run()
     std::cout<<"Congratulations, you have reached the End room and won the game!"<<std::endl;
 }
 
-//TODO refactor step
 bool Game::step() {
     do {
         int pos = player.getPosition();
@@ -224,8 +223,7 @@ bool Game::step() {
             }
         }
         std::cout<<dir<<std::endl;
-        //TODO refactor infinit while true loop
-        handleUserInput();
+        Game::handleUserInput();
     } while (player.getPosition() != 6);
     return true;
 }
