@@ -37,49 +37,64 @@ void Game::loadAreas()
 
 void Game::printHelp() {
     std::cout<<"Help: you can use case insensitive 'h' or 'help' for this message, or"<<std::endl;
-    std::cout<<"'g' or 'go' n/north/e/east/s/south/w/west to go to the given direction"<<std::endl;
-    std::cout<<"or..."<<std::endl;
+    std::cout<<"'g' or 'go' n/north/e/east/s/south/w/west to go to the given direction or"<<std::endl;
+    std::cout<<"'u' or 'use' or"<<std::endl;
+    std::cout<<"'e' or 'eat' or"<<std::endl;
+    std::cout<<"'f' or 'fight' or"<<std::endl;
+    std::cout<<"'p' or 'pickup' or"<<std::endl;
+    std::cout<<"'d' or 'drop' or"<<std::endl;
+    std::cout<<"'x' or 'exit' or"<<std::endl;
+    std::cout<<"..."<<std::endl;
 }
 
-//TODO remove code duplicates
+void Game::moveDirection(int dir) {
+    if (areas[player.getPosition()].getValidDirs()[dir] != -1) {
+        player.setPosition(areas[player.getPosition()].getValidDirs()[dir]);
+        run();
+    } else {
+        std::cout << "Not valid direction" << std::endl;
+    }
+    return;
+}
+
+//TODO enum for directions
 void Game::moveTo(const std::string& dir) {
     std::cout<<"GO"<<std::endl;
     if (dir == "n" || dir == "north") {
-        if (areas[player.getPosition()].getValidDirs()[0] != -1) {
-            player.setPosition(areas[player.getPosition()].getValidDirs()[0]);
-            run();
-        } else {
-            std::cout << "Not valid direction" << std::endl;
-            run();
-        }
+        Game::moveDirection(0);
+    } else if (dir == "e" || dir == "east") {
+        Game::moveDirection(1);
+    } else if (dir == "s" || dir == "south") {
+        Game::moveDirection(2);
+    } else if (dir == "w" || dir == "west") {
+        Game::moveDirection(3);
     }
-    if (dir == "e" || dir == "east") {
-        if (areas[player.getPosition()].getValidDirs()[1] != -1) {
-            player.setPosition(areas[player.getPosition()].getValidDirs()[1]);
-            run();
-        } else {
-            std::cout << "Not valid direction" << std::endl;
-            run();
-        }
+    run();
+}
+
+std::string Game::removeWhitespace(std::string str) {
+    std::string result = "";
+    //remove leading spaces
+    int c = 0;
+    while (str[c] == ' ') {
+        ++c;
     }
-    if (dir == "s" || dir == "south") {
-        if (areas[player.getPosition()].getValidDirs()[2] != -1) {
-            player.setPosition(areas[player.getPosition()].getValidDirs()[2]);
-            run();
-        } else {
-            std::cout << "Not valid direction" << std::endl;
-            run();
-        }
+    str = str.substr(c, str.size());
+    //remove inner double spaces
+    while (str.find("  ") != -1) {
+        int pos = str.find("  ");
+        result = str.substr(0, pos);
+        result += str.substr(pos+1, str.size());
+        str = result;
     }
-    if (dir == "w" || dir == "west") {
-        if (areas[player.getPosition()].getValidDirs()[3] != -1) {
-            player.setPosition(areas[player.getPosition()].getValidDirs()[3]);
-            run();
-        } else {
-            std::cout << "Not valid direction" << std::endl;
-            run();
-        }
+    //remove trailing spaces
+    c = str.size()-1;
+    while (str[c] == ' ') {
+        --c;
     }
+    result = str.substr(0, c+1);
+
+    return result;
 }
 
 void Game::handleUserInput() {
@@ -119,17 +134,21 @@ void Game::handleUserInput() {
         } else {
             firstWord = lowerInput.substr(0, spacePos);
             restWords = lowerInput.substr(spacePos+1, lowerInput.size());
-            //TODO rmeove spaces from the begon amd end of restWords
+            restWords = Game::removeWhitespace(restWords);
         }
         std::cout<<"firstWord "<<firstWord<<std::endl;
         if (restWords != "") {
             std::cout<<"restWords "<<restWords<<std::endl;
         }
+        //TODO inventory
         std::vector<std::string> validFirstWords = {"h", "help",
                                                     "g", "go",
                                                     "u", "use",
                                                     "e", "eat",
-                                                    "f", "fight"};
+                                                    "f", "fight",
+                                                    "x", "exit",
+                                                    "p", "pickup",
+                                                    "d", "drop"};
 
         for (std::string word : validFirstWords) {
             if (firstWord == word) {
@@ -180,6 +199,7 @@ void Game::printItemsInRoom(std::vector<Item> items) {
 
 void Game::run()
 {
+    do
     while(!step()) {
         int pos = player.getPosition();
         std::cout<<"You are now in room nr "<<areas[pos].getName()<<", "<<areas[pos].getDescription()<< std::endl;

@@ -24,6 +24,8 @@ private:
     void moveTo(const std::string& dir);
     void printHelp();
     std::vector<Item> items;
+    void moveDirection(int dir);
+    std::string removeWhitespace(std::string str);
 };
 
 
