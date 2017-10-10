@@ -199,7 +199,6 @@ void Game::printItemsInRoom(std::vector<Item> items) {
 
 void Game::run()
 {
-    do
     while(!step()) {
         int pos = player.getPosition();
         std::cout<<"You are now in room nr "<<areas[pos].getName()<<", "<<areas[pos].getDescription()<< std::endl;
