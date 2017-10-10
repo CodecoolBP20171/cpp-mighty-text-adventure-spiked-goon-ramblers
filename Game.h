@@ -20,6 +20,7 @@ private:
     void moveTo(const std::string& dir);
     void printHelp();
     void moveDirection(int dir);
+    std::string removeWhitespace(std::string str);
 
 };
 

@@ -65,6 +65,31 @@ void Game::moveTo(const std::string& dir) {
     run();
 }
 
+std::string Game::removeWhitespace(std::string str) {
+    std::string result = "";
+    //remove leading spaces
+    int c = 0;
+    while (str[c] == ' ') {
+        ++c;
+    }
+    str = str.substr(c, str.size());
+    //remove inner double spaces
+    while (str.find("  ") != -1) {
+        int pos = str.find("  ");
+        result = str.substr(0, pos);
+        result += str.substr(pos+1, str.size());
+        str = result;
+    }
+    //remove trailing spaces
+    c = str.size()-1;
+    while (str[c] == ' ') {
+        --c;
+    }
+    result = str.substr(0, c+1);
+
+    return result;
+}
+
 void Game::handleUserInput() {
     string input;
     bool validInput;
@@ -102,7 +127,7 @@ void Game::handleUserInput() {
         } else {
             firstWord = lowerInput.substr(0, spacePos);
             restWords = lowerInput.substr(spacePos+1, lowerInput.size());
-            //TODO rmeove spaces from the begon amd end of restWords
+            restWords = Game::removeWhitespace(restWords);
         }
         std::cout<<"firstWord "<<firstWord<<std::endl;
         if (restWords != "") {
