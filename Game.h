@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "Area.hpp"
+#include "Item.h"
 
 using namespace std;
 
@@ -10,6 +11,9 @@ class Game {
 public:
     void init();
     void run();
+    void createItem();
+    std::vector<Item> getItems(int& pos) const;
+    void printItemsInRoom(std::vector<Item> items);
 
 private:
     vector<Area> areas; // areas has only non-changeable information
@@ -19,7 +23,7 @@ private:
     void handleUserInput();
     void moveTo(const std::string& dir);
     void printHelp();
-
+    std::vector<Item> items;
 };
 
 

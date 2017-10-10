@@ -7,6 +7,7 @@ Player player;
 void Game::init()
 {
     loadAreas();
+    createItem();
     player.setPosition(0);
 }
 
@@ -152,11 +153,37 @@ void Game::handleUserInput() {
 
 }
 
+void Game::createItem() {
+    items.emplace_back("Key", 3, 2);
+}
+
+std::vector<Item> Game::getItems(int& pos) const {
+    std::vector<Item> itemsInRoom;
+    for (Item item : items) {
+        if (item.getPosition() == pos) {
+            itemsInRoom.emplace_back(item);
+        }
+    }
+    return itemsInRoom;
+}
+
+void Game::printItemsInRoom(std::vector<Item> items) {
+    cout << "Items: ";
+    if (items.empty()) {
+        cout << "no item in this room\n";
+        return;
+    }
+    for (Item item : items) {
+        cout << item.getName() << endl;
+    }
+}
+
 void Game::run()
 {
     while(!step()) {
         int pos = player.getPosition();
         std::cout<<"You are now in room nr "<<areas[pos].getName()<<", "<<areas[pos].getDescription()<< std::endl;
+        printItemsInRoom(getItems(pos));
         const int* dirs = areas[pos].getValidDirs();
         std::cout<<"You can go to ";
         string dir;
