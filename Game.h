@@ -19,6 +19,7 @@ private:
     void handleUserInput();
     void moveTo(const std::string& dir);
     void printHelp();
+    void moveDirection(int dir);
 
 };
 
