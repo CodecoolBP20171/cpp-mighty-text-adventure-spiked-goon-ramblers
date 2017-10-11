@@ -1,37 +1,33 @@
 #ifndef CPP_2ND_TW_MIGHTY_TEXT_ADVENTURE_AREA_HPP
 #define CPP_2ND_TW_MIGHTY_TEXT_ADVENTURE_AREA_HPP
-#include <string>
 
 using namespace std;
 
 class Area
 {
 public:
-    Area(const string& name, const string& description, const int (&validDirs)[4])
-        : name(name)
-        , description(description)
-        , validDirs(validDirs)
+    enum directions {
+        north,
+        east,
+        south,
+        west
+    };
+
+    enum door {
+        closed,
+        open
+    };
+
+
+    Area(const door& n, const door& e, const door& s, const door& w)
+            : toNorth(n)
+            , toEast(e)
+            , toSouth(s)
+            , toWest(w)
     {}
 
-    std::string getName() { return name;}
-
-    std::string getDescription() { return description;}
-
-    const int* getValidDirs() const { return validDirs;}
-
-    bool isVisited() { return visited;}
-
-    void setVisited() { this->visited = true;}
-
-private:
-    const string name;
-    const string description;
-    const int (&validDirs)[4];
-    bool visited = false;
-    //std::vector<int> setValidDirs();
-    void setName();
-    void setDescription();
-
+    const bool toNorth, toEast, toSouth, toWest;
 };
+
 #endif //CPP_2ND_TW_MIGHTY_TEXT_ADVENTURE_AREA_HPP
 

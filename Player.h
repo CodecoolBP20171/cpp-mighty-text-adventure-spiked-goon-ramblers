@@ -15,9 +15,14 @@ public:
     void setPosition(int);
     Inventory* getInventory();
     void showInventory();
+    void setRoomVisited(int);
+    std::vector<int> getRoomsVisited();
+    bool isRoomVisited(int);
+
 private:
     int position;
     Inventory* inventory = new Inventory(20);
+    std::vector<int> roomsVisited;
 };
 
 

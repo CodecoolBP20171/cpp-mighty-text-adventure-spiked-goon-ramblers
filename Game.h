@@ -16,7 +16,8 @@ public:
     std::vector<Item> getItems(int& pos) const;
     void printItemsInRoom(std::vector<Item> items);
     void setSize(int, int);
-    void setStartandEndRoomIndex(int, int);
+    void setStartAndEndRoomIndex(int, int);
+    void createMaze();
 
 private:
     vector<Area> areas; // areas has only non-changeable information
@@ -24,6 +25,7 @@ private:
     int ySize;
     int startRoomIndex;
     int endRoomIndex;
+    std::vector<Area*> maze;
 
     void loadAreas();
     bool step();
@@ -34,7 +36,7 @@ private:
     void moveDirection(int dir);
     std::string removeWhitespace(std::string str);
     void showMap();
-    void printRoomRow(Area&);
+    void printRoomRow(int);
 };
 
 

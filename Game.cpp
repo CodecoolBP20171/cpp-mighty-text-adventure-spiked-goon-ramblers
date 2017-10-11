@@ -7,10 +7,23 @@ Player player;
 void Game::init()
 {
     setSize(3, 3);
-    setStartandEndRoomIndex(6, 2);
     loadAreas();
+    createMaze();
+    setStartAndEndRoomIndex(6, 2);
     createItem();
     player.setPosition(startRoomIndex);
+}
+
+void Game::createMaze() {
+    maze.push_back(&areas[3]);
+    maze.push_back(&areas[2]);
+    maze.push_back(&areas[1]);
+    maze.push_back(&areas[5]);
+    maze.push_back(&areas[2]);
+    maze.push_back(&areas[1]);
+    maze.push_back(&areas[4]);
+    maze.push_back(&areas[0]);
+    maze.push_back(&areas[0]);
 }
 
 void Game::setSize(int x, int y) {
@@ -18,37 +31,30 @@ void Game::setSize(int x, int y) {
     this->ySize = y;
 }
 
-void Game::setStartandEndRoomIndex(int s, int e) {
+void Game::setStartAndEndRoomIndex(int s, int e) {
     this->startRoomIndex = s;
     this->endRoomIndex = e;
 }
 
 void Game::loadAreas()
 {
-    static int dirs4[4] = {-1, 1, 3, -1};
-    areas.emplace_back("4", "Fourth room", dirs4);
-
-    static int dirs5[4] = {-1, 2, -1, 0};
-    areas.emplace_back("5", "Fifth room", dirs5);
-
-    static int dirs6[4] = {-1, -1, -1, 1};
-    areas.emplace_back("End", "End room", dirs6);
-
-    static int dirs1[4] = {0, 4, 6, -1};
-    areas.emplace_back("1", "First room", dirs1);
-
-    static int dirs2[4] = {-1, 5, -1, 3};
-    areas.emplace_back("2", "Second room", dirs2);
-
-    static int dirs3[4] = {-1, -1, -1, 4};
-    areas.emplace_back("3", "Third room", dirs3);
-
-    static int dirs0[4] = {3, -1, -1, -1};
-    areas.emplace_back("Start", "Start room", dirs0);
-
-    static int dirsUnavailable[4] = {-1, -1, -1, -1};
-    areas.emplace_back("Locked", "Locked room", dirsUnavailable);
-    areas.emplace_back("Locked", "Locked room", dirsUnavailable);
+    areas.emplace_back(Area::closed, Area::closed, Area::closed, Area::closed);
+    areas.emplace_back(Area::closed, Area::closed, Area::closed, Area::open);
+    areas.emplace_back(Area::closed, Area::open, Area::closed, Area::open);
+    areas.emplace_back(Area::closed, Area::open, Area::open, Area::closed);
+    areas.emplace_back(Area::open, Area::closed, Area::closed, Area::closed);
+    areas.emplace_back(Area::open, Area::open, Area::open, Area::closed);
+    //areas not used for basic game
+    areas.emplace_back(Area::open, Area::open, Area::open, Area::open);
+    areas.emplace_back(Area::closed, Area::open, Area::closed, Area::closed);
+    areas.emplace_back(Area::closed, Area::closed, Area::open, Area::closed);
+    areas.emplace_back(Area::open, Area::open, Area::closed, Area::open);
+    areas.emplace_back(Area::open, Area::closed, Area::open, Area::open);
+    areas.emplace_back(Area::closed, Area::open, Area::open, Area::open);
+    areas.emplace_back(Area::open, Area::open, Area::closed, Area::closed);
+    areas.emplace_back(Area::open, Area::closed, Area::open, Area::closed);
+    areas.emplace_back(Area::open, Area::closed, Area::closed, Area::open);
+    areas.emplace_back(Area::closed, Area::closed, Area::open, Area::open);
 }
 
 void Game::printHelp() {
@@ -66,10 +72,21 @@ void Game::printHelp() {
 }
 
 void Game::moveDirection(int dir) {
-    if (areas[player.getPosition()].getValidDirs()[dir] != -1) {
-        player.setPosition(areas[player.getPosition()].getValidDirs()[dir]);
-    } else {
-        std::cout << "Not valid direction" << std::endl;
+    if (dir == Area::north && maze[player.getPosition()]->toNorth) {
+        player.setPosition(player.getPosition()-xSize);
+        return;
+    }
+    if (dir == Area::east && maze[player.getPosition()]->toEast) {
+        player.setPosition(player.getPosition()+1);
+        return;
+    }
+    if (dir == Area::south && maze[player.getPosition()]->toSouth) {
+        player.setPosition(player.getPosition()+xSize);
+        return;
+    }
+    if (dir == Area::west && maze[player.getPosition()]->toWest) {
+        player.setPosition(player.getPosition()-1);
+        return;
     }
     return;
 }
@@ -78,13 +95,13 @@ void Game::moveDirection(int dir) {
 void Game::moveTo(const std::string& dir) {
     std::cout<<"GO"<<std::endl;
     if (dir == "n" || dir == "north") {
-        moveDirection(0);
+        moveDirection(Area::north);
     } else if (dir == "e" || dir == "east") {
-        moveDirection(1);
+        moveDirection(Area::east);
     } else if (dir == "s" || dir == "south") {
-        moveDirection(2);
+        moveDirection(Area::south);
     } else if (dir == "w" || dir == "west") {
-        moveDirection(3);
+        moveDirection(Area::west);
     }
     return;
 }
@@ -120,25 +137,25 @@ void Game::showMap() {
         std::cout<<area.getName()<<" "<<area.isVisited()<<std::endl;
     }*/
     for (int y = 0; y < ySize; y++) {
-            printRoomRow(areas[y*xSize]);
+            printRoomRow(y*xSize);
     }
 
     std::cout<<"Information about visited rooms:\n";
     std::cout<<"@ -> you are here\n";
-    for (auto &area: areas) {
-        if ( area.isVisited()) {
-            std::cout<<area.getName()[0]<<": "<<area.getDescription()<<std::endl;
+    for (auto &room: player.getRoomsVisited() ) {
+        /*if ( area.isVisited() ) {
+            std::cout<<area.getName()[0]<<": "<<area.getDescription()<<std::endl;*/
+        std::cout<<room<<std::endl;
         }
-    }
     std::cout<<std::endl;
 }
 
-void Game::printRoomRow(Area& area) {
+void Game::printRoomRow(int mazeRowFirstElementIndex) {
     //if all rooms in rows are empty, don't draw anything
-    Area* room = &area;
+    //Area* room = &area;
     int count = 0;
-    for (int x = 0; x < xSize; x++) {
-        if ( !(room+x)->isVisited() ) {
+    for (int x = mazeRowFirstElementIndex; x < mazeRowFirstElementIndex+xSize; x++) {
+        if ( !player.isRoomVisited(x) ) {
             ++count;
         }
     }
@@ -146,11 +163,11 @@ void Game::printRoomRow(Area& area) {
         return;
     }
     //first row of draw
-    for (int x = 0; x < xSize; x++) {
+    for (int x = mazeRowFirstElementIndex; x < mazeRowFirstElementIndex+xSize; x++) {
         //std::cout<<(room+x)->getName()<<" "<<(room+x)->isVisited()<<" | ";
-        if ( !(room+x)->isVisited() ) {
+        if ( !player.isRoomVisited(x) ) {
             std::cout<<"     ";
-        } else if ( (room+x)->getValidDirs()[0] != -1 ) {
+        } else if ( maze[x]->toNorth ) {
             std::cout<<"+   +";
         } else {
             std::cout<<"+---+";
@@ -159,20 +176,20 @@ void Game::printRoomRow(Area& area) {
     std::cout<<std::endl;
 
     //second row of draw
-    for (int x = 0; x < xSize; x++) {
+    for (int x = mazeRowFirstElementIndex; x < mazeRowFirstElementIndex+xSize; x++) {
         //std::cout<<(room+x)->getName()<<" "<<(room+x)->isVisited()<<" | ";
-        if ( !(room+x)->isVisited() ) {
+        if ( !player.isRoomVisited(x) ) {
             std::cout<<"     ";
-        } else if ( (room+x)->getValidDirs()[3] != -1 ) {
+        } else if ( maze[x]->toWest ) {
             std::cout<<"    ";
-            if ( (room+x)->getValidDirs()[1] != -1 ) {
+            if ( maze[x]->toEast ) {
                 std::cout<<" ";
             } else {
                 std::cout<<"|";
             }
         } else {
             std::cout<<"|   ";
-            if ( (room+x)->getValidDirs()[1] != -1 ) {
+            if ( maze[x]->toEast ) {
                 std::cout<<" ";
             } else {
                 std::cout<<"|";
@@ -182,20 +199,20 @@ void Game::printRoomRow(Area& area) {
     std::cout<<std::endl;
 
     //third row of draw
-    for (int x = 0; x < xSize; x++) {
+    for (int x = mazeRowFirstElementIndex; x < mazeRowFirstElementIndex+xSize; x++) {
         //std::cout<<(room+x)->getName()<<" "<<(room+x)->isVisited()<<" | ";
-        if ( !(room+x)->isVisited() ) {
+        if ( !player.isRoomVisited(x) ) {
             std::cout<<"     ";
-        } else if ( (room+x)->getValidDirs()[3] != -1 ) {
-            std::cout<<"  "<<(room+x)->getName()[0]<<" ";
-            if ( (room+x)->getValidDirs()[1] != -1 ) {
+        } else if ( maze[x]->toWest ) {
+            std::cout<<"  "<<x<<" ";
+            if ( maze[x]->toEast ) {
                 std::cout<<" ";
             } else {
                 std::cout<<"|";
             }
         } else {
-            std::cout<<"| "<<(room+x)->getName()[0]<<" ";
-            if ( (room+x)->getValidDirs()[1] != -1 ) {
+            std::cout<<"| "<<x<<" ";
+            if ( maze[x]->toEast ) {
                 std::cout<<" ";
             } else {
                 std::cout<<"|";
@@ -206,30 +223,30 @@ void Game::printRoomRow(Area& area) {
 
 
     //fourth row of draw
-    for (int x = 0; x < xSize; x++) {
+    for (int x = mazeRowFirstElementIndex; x < mazeRowFirstElementIndex+xSize; x++) {
         //std::cout<<(room+x)->getName()<<" "<<(room+x)->isVisited()<<" | ";
-        if ( !(room+x)->isVisited() ) {
+        if ( !player.isRoomVisited(x) ) {
             std::cout<<"     ";
-        } else if ( (room+x)->getValidDirs()[3] != -1 ) {
+        } else if ( maze[x]->toWest ) {
             std::cout<<"   ";
-            if ( (room+x)->getName() == areas[player.getPosition()].getName() ) {
+            if ( x == player.getPosition() ) {
                 std::cout<<"@";
             } else {
                 std::cout<<" ";
             }
-            if ( (room+x)->getValidDirs()[1] != -1 ) {
+            if ( maze[x]->toEast ) {
                 std::cout<<" ";
             } else {
                 std::cout<<"|";
             }
         } else {
             std::cout<<"|  ";
-            if ( (room+x)->getName() == areas[player.getPosition()].getName() ) {
+            if ( x == player.getPosition() ) {
                 std::cout<<"@";
             } else {
                 std::cout<<" ";
             }
-            if ( (room+x)->getValidDirs()[1] != -1 ) {
+            if ( maze[x]->toEast ) {
                 std::cout<<" ";
             } else {
                 std::cout<<"|";
@@ -239,11 +256,11 @@ void Game::printRoomRow(Area& area) {
     std::cout<<std::endl;
 
     //fifth row of draw
-    for (int x = 0; x < xSize; x++) {
+    for (int x = mazeRowFirstElementIndex; x < mazeRowFirstElementIndex+xSize; x++) {
         //std::cout<<(room+x)->getName()<<" "<<(room+x)->isVisited()<<" | ";
-        if ( !(room+x)->isVisited() ) {
+        if ( !player.isRoomVisited(x) ) {
             std::cout<<"     ";
-        } else if ( (room+x)->getValidDirs()[2] != -1 ) {
+        } else if ( maze[x]->toSouth ) {
             std::cout<<"+   +";
         } else {
             std::cout<<"+---+";
@@ -377,7 +394,8 @@ void Game::run()
 
     } while ( !step() );
     //print 'final' map before congratulations
-    areas[player.getPosition()].setVisited();
+    //areas[player.getPosition()].setVisited();
+    player.setRoomVisited(player.getPosition());
     showMap();
 
     std::cout<<"Congratulations, you have reached the End room and won the game!"<<std::endl;
@@ -386,12 +404,17 @@ void Game::run()
 bool Game::step() {
     do {
         int pos = player.getPosition();
-        std::cout<<"You are now in room nr "<<areas[pos].getName()<<", "<<areas[pos].getDescription()<< std::endl;
-        areas[pos].setVisited();
+        std::cout<<"You are now in room nr "<<pos<<std::endl;//", "<<areas[pos].getDescription()<< std::endl;
+        player.setRoomVisited(pos);//areas[pos].setVisited();
         printItemsInRoom(getItems(pos));
-        const int* dirs = areas[pos].getValidDirs();
+        //const int* dirs = areas[pos].getValidDirs();
         std::cout<<"You can go to ";
-        string dir;
+        if (maze[pos]->toNorth) std::cout << " north";
+        if (maze[pos]->toEast) std::cout << " east";
+        if (maze[pos]->toSouth) std::cout << " south";
+        if (maze[pos]->toWest) std::cout << " west";
+        std::cout<<std::endl;
+        /*string dir;
         for (int i = 0; i < 4; i++) {
             //std::cout<<dirs[i]<<std::endl;
             if ( dirs[i] != -1) {
@@ -402,6 +425,7 @@ bool Game::step() {
             }
         }
         std::cout<<dir<<std::endl;
+        */
         handleUserInput();
     } while (player.getPosition() != endRoomIndex);
     return true;
