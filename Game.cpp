@@ -120,34 +120,99 @@ void Game::showMap() {
 
 void Game::printRoomRow(Area& area) {
     Area* room = &area;
+    //first row of draw
     for (int x = 0; x < xSize; x++) {
         //std::cout<<(room+x)->getName()<<" "<<(room+x)->isVisited()<<" | ";
-        if ( (room+x)->isVisited() ) std::cout<<"+---+";
-        else std::cout<<"     ";
+        if ( !(room+x)->isVisited() ) {
+            std::cout<<"     ";
+        } else if ( (room+x)->getValidDirs()[0] != -1 ) {
+            std::cout<<"+   +";
+        } else {
+            std::cout<<"+---+";
+        }
     }
     std::cout<<std::endl;
+
+    //second row of draw
     for (int x = 0; x < xSize; x++) {
         //std::cout<<(room+x)->getName()<<" "<<(room+x)->isVisited()<<" | ";
-        if ( (room+x)->isVisited() ) std::cout<<"|   |";
-        else std::cout<<"     ";
+        if ( !(room+x)->isVisited() ) {
+            std::cout<<"     ";
+        } else if ( (room+x)->getValidDirs()[3] != -1 ) {
+            std::cout<<"    ";
+            if ( (room+x)->getValidDirs()[1] != -1 ) {
+                std::cout<<" ";
+            } else {
+                std::cout<<"|";
+            }
+        } else {
+            std::cout<<"|   ";
+            if ( (room+x)->getValidDirs()[1] != -1 ) {
+                std::cout<<" ";
+            } else {
+                std::cout<<"|";
+            }
+        }
     }
     std::cout<<std::endl;
+
+    //third row of draw
     for (int x = 0; x < xSize; x++) {
         //std::cout<<(room+x)->getName()<<" "<<(room+x)->isVisited()<<" | ";
-        if ( (room+x)->isVisited() ) std::cout<<"| "<<(room+x)->getName()[0]<<" |";
-        else std::cout<<"     ";
+        if ( !(room+x)->isVisited() ) {
+            std::cout<<"     ";
+        } else if ( (room+x)->getValidDirs()[3] != -1 ) {
+            std::cout<<"  "<<(room+x)->getName()[0]<<" ";
+            if ( (room+x)->getValidDirs()[1] != -1 ) {
+                std::cout<<" ";
+            } else {
+                std::cout<<"|";
+            }
+        } else {
+            std::cout<<"| "<<(room+x)->getName()[0]<<" ";
+            if ( (room+x)->getValidDirs()[1] != -1 ) {
+                std::cout<<" ";
+            } else {
+                std::cout<<"|";
+            }
+        }
     }
     std::cout<<std::endl;
+
+
+    //fourth row of draw
     for (int x = 0; x < xSize; x++) {
         //std::cout<<(room+x)->getName()<<" "<<(room+x)->isVisited()<<" | ";
-        if ( (room+x)->isVisited() ) std::cout<<"|   |";
-        else std::cout<<"     ";
+        if ( !(room+x)->isVisited() ) {
+            std::cout<<"     ";
+        } else if ( (room+x)->getValidDirs()[3] != -1 ) {
+            std::cout<<"    ";
+            if ( (room+x)->getValidDirs()[1] != -1 ) {
+                std::cout<<" ";
+            } else {
+                std::cout<<"|";
+            }
+        } else {
+            std::cout<<"|   ";
+            if ( (room+x)->getValidDirs()[1] != -1 ) {
+                std::cout<<" ";
+            } else {
+                std::cout<<"|";
+            }
+        }
     }
     std::cout<<std::endl;
+
+    //fifth row of draw
     for (int x = 0; x < xSize; x++) {
         //std::cout<<(room+x)->getName()<<" "<<(room+x)->isVisited()<<" | ";
-        if ( (room+x)->isVisited() ) std::cout<<"+---+";
-        else std::cout<<"     ";
+        if ( !(room+x)->isVisited() ) {
+            std::cout<<"     ";
+        } else if ( (room+x)->getValidDirs()[2] != -1 ) {
+            std::cout<<"+   +";
+        } else {
+            std::cout<<"+---+";
+        }
     }
     std::cout<<std::endl;
 }
