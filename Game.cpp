@@ -342,7 +342,10 @@ void Game::run()
     do {
 
     } while ( !step() );
-    //TODO print 'final' map before congratulations
+    //print 'final' map before congratulations
+    areas[player.getPosition()].setVisited();
+    showMap();
+
     std::cout<<"Congratulations, you have reached the End room and won the game!"<<std::endl;
 }
 
