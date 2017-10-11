@@ -8,9 +8,11 @@ Player player;
 void Game::init()
 {
     setSize(3, 3);
+    //setSize(2, 2);
     loadAreas();
     createMaze();
     setStartAndEndRoomIndex(6, 2);
+    //setStartAndEndRoomIndex(2, 3);
     createItem();
     player.setPosition(startRoomIndex);
 }
@@ -19,6 +21,7 @@ void Game::createMaze() {
 
     string roomType;
     ifstream levelFile ("maze.txt");
+    //ifstream levelFile ("maze_test4x4.txt");
     if (levelFile.is_open())
     {
         while ( getline(levelFile, roomType) )
@@ -28,7 +31,6 @@ void Game::createMaze() {
         levelFile.close();
     }
     else cout << "Unable to open file";
-
 /*
     maze.push_back(&areas[3]);
     maze.push_back(&areas[2]);
