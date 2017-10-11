@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include "Game.h"
 #include "Player.h"
 
@@ -15,6 +16,20 @@ void Game::init()
 }
 
 void Game::createMaze() {
+
+    string roomType;
+    ifstream levelFile ("maze.txt");
+    if (levelFile.is_open())
+    {
+        while ( getline(levelFile, roomType) )
+        {
+            maze.push_back(&areas[std::stoi(roomType)]);//std::cout<<std::stoi(roomType);
+        }
+        levelFile.close();
+    }
+    else cout << "Unable to open file";
+
+/*
     maze.push_back(&areas[3]);
     maze.push_back(&areas[2]);
     maze.push_back(&areas[1]);
@@ -24,6 +39,7 @@ void Game::createMaze() {
     maze.push_back(&areas[4]);
     maze.push_back(&areas[0]);
     maze.push_back(&areas[0]);
+*/
 }
 
 void Game::setSize(int x, int y) {
