@@ -116,7 +116,14 @@ void Game::showMap() {
     for (int y = 0; y < ySize; y++) {
             printRoomRow(areas[y*xSize]);
     }
-    //TODO print info on rooms below map
+    
+    std::cout<<"Information about visited rooms:\n";
+    for (auto &area: areas) {
+        if ( area.isVisited()) {
+            std::cout<<area.getName()[0]<<": "<<area.getDescription()<<std::endl;
+        }
+    }
+    std::cout<<std::endl;
 }
 
 void Game::printRoomRow(Area& area) {
