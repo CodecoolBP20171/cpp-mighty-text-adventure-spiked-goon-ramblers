@@ -116,8 +116,9 @@ void Game::showMap() {
     for (int y = 0; y < ySize; y++) {
             printRoomRow(areas[y*xSize]);
     }
-    
+
     std::cout<<"Information about visited rooms:\n";
+    std::cout<<"@ -> you are here\n";
     for (auto &area: areas) {
         if ( area.isVisited()) {
             std::cout<<area.getName()[0]<<": "<<area.getDescription()<<std::endl;
@@ -194,14 +195,24 @@ void Game::printRoomRow(Area& area) {
         if ( !(room+x)->isVisited() ) {
             std::cout<<"     ";
         } else if ( (room+x)->getValidDirs()[3] != -1 ) {
-            std::cout<<"    ";
+            std::cout<<"   ";
+            if ( (room+x)->getName() == areas[player.getPosition()].getName() ) {
+                std::cout<<"@";
+            } else {
+                std::cout<<" ";
+            }
             if ( (room+x)->getValidDirs()[1] != -1 ) {
                 std::cout<<" ";
             } else {
                 std::cout<<"|";
             }
         } else {
-            std::cout<<"|   ";
+            std::cout<<"|  ";
+            if ( (room+x)->getName() == areas[player.getPosition()].getName() ) {
+                std::cout<<"@";
+            } else {
+                std::cout<<" ";
+            }
             if ( (room+x)->getValidDirs()[1] != -1 ) {
                 std::cout<<" ";
             } else {

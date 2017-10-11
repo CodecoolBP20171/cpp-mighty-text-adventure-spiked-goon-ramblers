@@ -13,15 +13,15 @@ public:
         , validDirs(validDirs)
     {}
 
-    std::string getName() { return name;};
+    std::string getName() { return name;}
 
-    std::string getDescription() { return description;};
+    std::string getDescription() { return description;}
 
-    const int* getValidDirs() const { return validDirs;};
+    const int* getValidDirs() const { return validDirs;}
 
-    bool isVisited() { return visited;};
+    bool isVisited() { return visited;}
 
-    void setVisited() { this->visited = true;};
+    void setVisited() { this->visited = true;}
 
 private:
     const string name;
