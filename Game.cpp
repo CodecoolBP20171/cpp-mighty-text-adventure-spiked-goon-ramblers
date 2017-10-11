@@ -121,7 +121,28 @@ void Game::showMap() {
 void Game::printRoomRow(Area& area) {
     Area* room = &area;
     for (int x = 0; x < xSize; x++) {
-        std::cout<<(room+x)->getName()<<" "<<(room+x)->isVisited()<<" | ";
+        //std::cout<<(room+x)->getName()<<" "<<(room+x)->isVisited()<<" | ";
+        std::cout<<"+---+";
+    }
+    std::cout<<std::endl;
+    for (int x = 0; x < xSize; x++) {
+        //std::cout<<(room+x)->getName()<<" "<<(room+x)->isVisited()<<" | ";
+        std::cout<<"|   |";
+    }
+    std::cout<<std::endl;
+    for (int x = 0; x < xSize; x++) {
+        //std::cout<<(room+x)->getName()<<" "<<(room+x)->isVisited()<<" | ";
+        std::cout<<"| "<<(room+x)->getName()[0]<<" |";
+    }
+    std::cout<<std::endl;
+    for (int x = 0; x < xSize; x++) {
+        //std::cout<<(room+x)->getName()<<" "<<(room+x)->isVisited()<<" | ";
+        std::cout<<"|   |";
+    }
+    std::cout<<std::endl;
+    for (int x = 0; x < xSize; x++) {
+        //std::cout<<(room+x)->getName()<<" "<<(room+x)->isVisited()<<" | ";
+        std::cout<<"+---+";
     }
     std::cout<<std::endl;
 }
