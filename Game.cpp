@@ -122,27 +122,32 @@ void Game::printRoomRow(Area& area) {
     Area* room = &area;
     for (int x = 0; x < xSize; x++) {
         //std::cout<<(room+x)->getName()<<" "<<(room+x)->isVisited()<<" | ";
-        std::cout<<"+---+";
+        if ( (room+x)->isVisited() ) std::cout<<"+---+";
+        else std::cout<<"     ";
     }
     std::cout<<std::endl;
     for (int x = 0; x < xSize; x++) {
         //std::cout<<(room+x)->getName()<<" "<<(room+x)->isVisited()<<" | ";
-        std::cout<<"|   |";
+        if ( (room+x)->isVisited() ) std::cout<<"|   |";
+        else std::cout<<"     ";
     }
     std::cout<<std::endl;
     for (int x = 0; x < xSize; x++) {
         //std::cout<<(room+x)->getName()<<" "<<(room+x)->isVisited()<<" | ";
-        std::cout<<"| "<<(room+x)->getName()[0]<<" |";
+        if ( (room+x)->isVisited() ) std::cout<<"| "<<(room+x)->getName()[0]<<" |";
+        else std::cout<<"     ";
     }
     std::cout<<std::endl;
     for (int x = 0; x < xSize; x++) {
         //std::cout<<(room+x)->getName()<<" "<<(room+x)->isVisited()<<" | ";
-        std::cout<<"|   |";
+        if ( (room+x)->isVisited() ) std::cout<<"|   |";
+        else std::cout<<"     ";
     }
     std::cout<<std::endl;
     for (int x = 0; x < xSize; x++) {
         //std::cout<<(room+x)->getName()<<" "<<(room+x)->isVisited()<<" | ";
-        std::cout<<"+---+";
+        if ( (room+x)->isVisited() ) std::cout<<"+---+";
+        else std::cout<<"     ";
     }
     std::cout<<std::endl;
 }
