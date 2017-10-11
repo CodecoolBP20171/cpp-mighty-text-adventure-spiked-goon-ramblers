@@ -8,31 +8,35 @@ void Game::init()
 {
     loadAreas();
     createItem();
-    player.setPosition(0);
+    player.setPosition(6);
 }
 
 void Game::loadAreas()
 {
-    static int dirs0[4] = {1, -1, -1, -1};
-    areas.emplace_back("Start", "Start room", dirs0);
-
-    static int dirs1[4] = {4, 2, 0, -1};
-    areas.emplace_back("1", "First room", dirs1);
-
-    static int dirs2[4] = {-1, 3, -1, 1};
-    areas.emplace_back("2", "Second room", dirs2);
-
-    static int dirs3[4] = {-1, -1, -1, 2};
-    areas.emplace_back("3", "Third room", dirs3);
-
-    static int dirs4[4] = {-1, 5, 1, -1};
+    static int dirs4[4] = {-1, 1, 3, -1};
     areas.emplace_back("4", "Fourth room", dirs4);
 
-    static int dirs5[4] = {-1, 6, -1, 4};
+    static int dirs5[4] = {-1, 2, -1, 0};
     areas.emplace_back("5", "Fifth room", dirs5);
 
-    static int dirs6[4] = {-1, -1, -1, 5};
+    static int dirs6[4] = {-1, -1, -1, 1};
     areas.emplace_back("End", "End room", dirs6);
+
+    static int dirs1[4] = {0, 4, 6, -1};
+    areas.emplace_back("1", "First room", dirs1);
+
+    static int dirs2[4] = {-1, 5, -1, 3};
+    areas.emplace_back("2", "Second room", dirs2);
+
+    static int dirs3[4] = {-1, -1, -1, 4};
+    areas.emplace_back("3", "Third room", dirs3);
+
+    static int dirs0[4] = {3, -1, -1, -1};
+    areas.emplace_back("Start", "Start room", dirs0);
+
+    static int dirsUnavailable[4] = {-1, -1, -1, -1};
+    areas.emplace_back("Locked", "Locked room", dirsUnavailable);
+    areas.emplace_back("Locked", "Locked room", dirsUnavailable);
 }
 
 void Game::printHelp() {
@@ -44,6 +48,7 @@ void Game::printHelp() {
     std::cout<<"'p' or 'pickup' or"<<std::endl;
     std::cout<<"'d' or 'drop' or"<<std::endl;
     std::cout<<"'i' or 'inventory' or"<<std::endl;
+    std::cout<<"'m' or 'map' or"<<std::endl;
     std::cout<<"'x' or 'exit' or"<<std::endl;
     std::cout<<"..."<<std::endl;
 }
@@ -97,6 +102,13 @@ std::string Game::removeWhitespace(std::string str) {
     return result;
 }
 
+void Game::showMap() {
+    std::cout<<"Map\n";
+    for (auto &area : areas) {
+        std::cout<<area.getName()<<" "<<area.isVisited()<<std::endl;
+    }
+}
+
 void Game::handleUserInput() {
     string input;
     bool validInput;
@@ -148,7 +160,8 @@ void Game::handleUserInput() {
                                                     "x", "exit",
                                                     "p", "pickup",
                                                     "d", "drop",
-                                                    "i", "inventory"};
+                                                    "i", "inventory",
+                                                    "m", "map"};
         for (std::string word : validFirstWords) {
             if (firstWord == word) {
                 //std::cout << "Valid first word" << std::endl;
@@ -173,11 +186,6 @@ void Game::handleUserInput() {
             if (item.getName() == restWords) {
                 if (item.getPosition() == player.getPosition()) {
                     player.getInventory()->pickUpItem(item);
-                   /* ///////
-                    std::cout<<"Item pos before "<<item.getPosition()<<std::endl;
-                    item.setPosition(-1);
-                    std::cout<<"Item pos after "<<item.getPosition()<<std::endl;
-                    ///////*/
                     std::cout<<item.getName()<<" picked up."<<std::endl;
                     player.showInventory();
                     break;
@@ -189,6 +197,8 @@ void Game::handleUserInput() {
         }
     } else if (firstWord == "i" || firstWord == "inventory") {
         player.showInventory();
+    } else if (firstWord == "m" || firstWord == "map") {
+        Game::showMap();
     }
 }
 
@@ -230,6 +240,7 @@ bool Game::step() {
     do {
         int pos = player.getPosition();
         std::cout<<"You are now in room nr "<<areas[pos].getName()<<", "<<areas[pos].getDescription()<< std::endl;
+        areas[pos].setVisited();
         printItemsInRoom(getItems(pos));
         const int* dirs = areas[pos].getValidDirs();
         std::cout<<"You can go to ";
@@ -245,7 +256,7 @@ bool Game::step() {
         }
         std::cout<<dir<<std::endl;
         Game::handleUserInput();
-    } while (player.getPosition() != 6);
+    } while (player.getPosition() != 2);
     return true;
 }
 

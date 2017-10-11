@@ -27,6 +27,7 @@ private:
     std::vector<Item> items;
     void moveDirection(int dir);
     std::string removeWhitespace(std::string str);
+    void showMap();
 };
 
 

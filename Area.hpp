@@ -7,13 +7,6 @@ using namespace std;
 class Area
 {
 public:
-/*
-Room::Room(std::string name, std::string description, std::vector<int> validDirs) {
-    this->name = name;
-    this->description = description;
-    this->validDirs = validDirs;
-};
- */
     Area(const string& name, const string& description, const int (&validDirs)[4])
         : name(name)
         , description(description)
@@ -26,11 +19,15 @@ Room::Room(std::string name, std::string description, std::vector<int> validDirs
 
     const int* getValidDirs() const { return validDirs;};
 
+    bool isVisited() { return visited;};
+
+    void setVisited() { this->visited = true;};
+
 private:
     const string name;
     const string description;
     const int (&validDirs)[4];
-
+    bool visited = false;
     //std::vector<int> setValidDirs();
     void setName();
     void setDescription();
