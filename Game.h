@@ -15,9 +15,12 @@ public:
     void createItem();
     std::vector<Item> getItems(int& pos) const;
     void printItemsInRoom(std::vector<Item> items);
+    void setSize(int, int);
 
 private:
     vector<Area> areas; // areas has only non-changeable information
+    int xSize;
+    int ySize;
 
     void loadAreas();
     bool step();
@@ -28,6 +31,7 @@ private:
     void moveDirection(int dir);
     std::string removeWhitespace(std::string str);
     void showMap();
+    void printRoomRow(Area&);
 };
 
 

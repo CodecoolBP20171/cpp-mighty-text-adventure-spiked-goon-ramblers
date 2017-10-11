@@ -6,9 +6,15 @@ Player player;
 
 void Game::init()
 {
+    setSize(3, 3);
     loadAreas();
     createItem();
     player.setPosition(6);
+}
+
+void Game::setSize(int x, int y) {
+    this->xSize = x;
+    this->ySize = y;
 }
 
 void Game::loadAreas()
@@ -104,9 +110,20 @@ std::string Game::removeWhitespace(std::string str) {
 
 void Game::showMap() {
     std::cout<<"Map\n";
-    for (auto &area : areas) {
+    /*for (auto &area : areas) {
         std::cout<<area.getName()<<" "<<area.isVisited()<<std::endl;
+    }*/
+    for (int y = 0; y < ySize; y++) {
+            printRoomRow(areas[y*xSize]);
     }
+}
+
+void Game::printRoomRow(Area& area) {
+    Area* room = &area;
+    for (int x = 0; x < xSize; x++) {
+        std::cout<<(room+x)->getName()<<" "<<(room+x)->isVisited()<<" | ";
+    }
+    std::cout<<std::endl;
 }
 
 void Game::handleUserInput() {
