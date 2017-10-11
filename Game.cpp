@@ -72,13 +72,13 @@ void Game::moveDirection(int dir) {
 void Game::moveTo(const std::string& dir) {
     std::cout<<"GO"<<std::endl;
     if (dir == "n" || dir == "north") {
-        Game::moveDirection(0);
+        moveDirection(0);
     } else if (dir == "e" || dir == "east") {
-        Game::moveDirection(1);
+        moveDirection(1);
     } else if (dir == "s" || dir == "south") {
-        Game::moveDirection(2);
+        moveDirection(2);
     } else if (dir == "w" || dir == "west") {
-        Game::moveDirection(3);
+        moveDirection(3);
     }
     return;
 }
@@ -283,7 +283,7 @@ void Game::handleUserInput() {
         } else {
             firstWord = lowerInput.substr(0, spacePos);
             restWords = lowerInput.substr(spacePos+1, lowerInput.size());
-            restWords = Game::removeWhitespace(restWords);
+            restWords = removeWhitespace(restWords);
         }
         /*std::cout<<"firstWord "<<firstWord<<std::endl;
         if (restWords != "") {
@@ -315,7 +315,7 @@ void Game::handleUserInput() {
         printHelp();
         return;
     } else if (firstWord == "g" || firstWord == "go") {
-        Game::moveTo(restWords);
+        moveTo(restWords);
         return;
     } else if (firstWord == "p" || firstWord == "pickup") {
         //TODO make separate function for pickup
@@ -335,7 +335,7 @@ void Game::handleUserInput() {
     } else if (firstWord == "i" || firstWord == "inventory") {
         player.showInventory();
     } else if (firstWord == "m" || firstWord == "map") {
-        Game::showMap();
+        showMap();
     }
 }
 
@@ -396,7 +396,7 @@ bool Game::step() {
             }
         }
         std::cout<<dir<<std::endl;
-        Game::handleUserInput();
+        handleUserInput();
     } while (player.getPosition() != 2);
     return true;
 }
