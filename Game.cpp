@@ -128,7 +128,17 @@ void Game::showMap() {
 }
 
 void Game::printRoomRow(Area& area) {
+    //if all rooms in rows are empty, don't draw anything
     Area* room = &area;
+    int count = 0;
+    for (int x = 0; x < xSize; x++) {
+        if ( !(room+x)->isVisited() ) {
+            ++count;
+        }
+    }
+    if (count == xSize) {
+        return;
+    }
     //first row of draw
     for (int x = 0; x < xSize; x++) {
         //std::cout<<(room+x)->getName()<<" "<<(room+x)->isVisited()<<" | ";
