@@ -116,6 +116,7 @@ void Game::showMap() {
     for (int y = 0; y < ySize; y++) {
             printRoomRow(areas[y*xSize]);
     }
+    //TODO print info on rooms below map
 }
 
 void Game::printRoomRow(Area& area) {
@@ -341,6 +342,7 @@ void Game::run()
     do {
 
     } while ( !step() );
+    //TODO print 'final' map before congratulations
     std::cout<<"Congratulations, you have reached the End room and won the game!"<<std::endl;
 }
 
