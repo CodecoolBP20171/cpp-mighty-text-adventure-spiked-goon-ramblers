@@ -7,14 +7,20 @@ Player player;
 void Game::init()
 {
     setSize(3, 3);
+    setStartandEndRoomIndex(6, 2);
     loadAreas();
     createItem();
-    player.setPosition(6);
+    player.setPosition(startRoomIndex);
 }
 
 void Game::setSize(int x, int y) {
     this->xSize = x;
     this->ySize = y;
+}
+
+void Game::setStartandEndRoomIndex(int s, int e) {
+    this->startRoomIndex = s;
+    this->endRoomIndex = e;
 }
 
 void Game::loadAreas()
@@ -397,7 +403,7 @@ bool Game::step() {
         }
         std::cout<<dir<<std::endl;
         handleUserInput();
-    } while (player.getPosition() != 2);
+    } while (player.getPosition() != endRoomIndex);
     return true;
 }
 

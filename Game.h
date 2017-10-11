@@ -16,11 +16,14 @@ public:
     std::vector<Item> getItems(int& pos) const;
     void printItemsInRoom(std::vector<Item> items);
     void setSize(int, int);
+    void setStartandEndRoomIndex(int, int);
 
 private:
     vector<Area> areas; // areas has only non-changeable information
     int xSize;
     int ySize;
+    int startRoomIndex;
+    int endRoomIndex;
 
     void loadAreas();
     bool step();
