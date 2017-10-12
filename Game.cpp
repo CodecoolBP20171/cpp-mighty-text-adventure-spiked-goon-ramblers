@@ -66,23 +66,23 @@ void Game::setStartAndEndRoomIndex(int s, int e) {
 
 void Game::loadAreas()
 {
-    areas.emplace_back(Area::closed, Area::closed, Area::closed, Area::closed);
-    areas.emplace_back(Area::closed, Area::closed, Area::closed, Area::open);
-    areas.emplace_back(Area::closed, Area::open, Area::closed, Area::open);
-    areas.emplace_back(Area::closed, Area::open, Area::open, Area::closed);
-    areas.emplace_back(Area::open, Area::closed, Area::closed, Area::closed);
-    areas.emplace_back(Area::open, Area::open, Area::open, Area::closed);
+    areas.emplace_back("closed room", Area::closed, Area::closed, Area::closed, Area::closed);
+    areas.emplace_back("open to west", Area::closed, Area::closed, Area::closed, Area::open);
+    areas.emplace_back("open to east, west", Area::closed, Area::open, Area::closed, Area::open);
+    areas.emplace_back("open to east, south", Area::closed, Area::open, Area::open, Area::closed);
+    areas.emplace_back("open to north", Area::open, Area::closed, Area::closed, Area::closed);
+    areas.emplace_back("open to north, east, south", Area::open, Area::open, Area::open, Area::closed);
     //areas not used for basic game
-    areas.emplace_back(Area::open, Area::open, Area::open, Area::open);
-    areas.emplace_back(Area::closed, Area::open, Area::closed, Area::closed);
-    areas.emplace_back(Area::closed, Area::closed, Area::open, Area::closed);
-    areas.emplace_back(Area::open, Area::open, Area::closed, Area::open);
-    areas.emplace_back(Area::open, Area::closed, Area::open, Area::open);
-    areas.emplace_back(Area::closed, Area::open, Area::open, Area::open);
-    areas.emplace_back(Area::open, Area::open, Area::closed, Area::closed);
-    areas.emplace_back(Area::open, Area::closed, Area::open, Area::closed);
-    areas.emplace_back(Area::open, Area::closed, Area::closed, Area::open);
-    areas.emplace_back(Area::closed, Area::closed, Area::open, Area::open);
+    areas.emplace_back("open to all directions", Area::open, Area::open, Area::open, Area::open);
+    areas.emplace_back("open to east", Area::closed, Area::open, Area::closed, Area::closed);
+    areas.emplace_back("open to south", Area::closed, Area::closed, Area::open, Area::closed);
+    areas.emplace_back("open to north, east, west", Area::open, Area::open, Area::closed, Area::open);
+    areas.emplace_back("open to north, south, west", Area::open, Area::closed, Area::open, Area::open);
+    areas.emplace_back("open to east, south, west", Area::closed, Area::open, Area::open, Area::open);
+    areas.emplace_back("open to north, east", Area::open, Area::open, Area::closed, Area::closed);
+    areas.emplace_back("open to north, south", Area::open, Area::closed, Area::open, Area::closed);
+    areas.emplace_back("open to north, west", Area::open, Area::closed, Area::closed, Area::open);
+    areas.emplace_back("open to south, west", Area::closed, Area::closed, Area::open, Area::open);
 }
 
 void Game::printHelp() {
@@ -171,9 +171,7 @@ void Game::showMap() {
     std::cout<<"Information about visited rooms:\n";
     std::cout<<"@ -> you are here\n";
     for (auto &room: player.getRoomsVisited() ) {
-        /*if ( area.isVisited() ) {
-            std::cout<<area.getName()[0]<<": "<<area.getDescription()<<std::endl;*/
-        std::cout<<room<<std::endl;
+        std::cout<<room<<": "<<maze[room]->getDescription()<<std::endl;
         }
     std::cout<<std::endl;
 }

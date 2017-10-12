@@ -19,14 +19,20 @@ public:
     };
 
 
-    Area(const door& n, const door& e, const door& s, const door& w)
-            : toNorth(n)
+    Area(const string& description, const door& n, const door& e, const door& s, const door& w)
+            : description(description)
+            , toNorth(n)
             , toEast(e)
             , toSouth(s)
             , toWest(w)
     {}
 
     const bool toNorth, toEast, toSouth, toWest;
+
+    string getDescription() { return this->description;}
+
+private:
+    const string description;
 };
 
 #endif //CPP_2ND_TW_MIGHTY_TEXT_ADVENTURE_AREA_HPP
