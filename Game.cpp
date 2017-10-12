@@ -7,11 +7,9 @@ Player player;
 
 void Game::init()
 {
-    setSize(3, 3);
     //setSize(2, 2);
     loadAreas();
     createMaze();
-    setStartAndEndRoomIndex(6, 2);
     //setStartAndEndRoomIndex(2, 3);
     createItem();
     player.setPosition(startRoomIndex);
@@ -19,14 +17,26 @@ void Game::init()
 
 void Game::createMaze() {
 
-    string roomType;
+    string line;
     ifstream levelFile ("maze.txt");
     //ifstream levelFile ("maze_test4x4.txt");
     if (levelFile.is_open())
     {
-        while ( getline(levelFile, roomType) )
-        {
-            maze.push_back(&areas[std::stoi(roomType)]);//std::cout<<std::stoi(roomType);
+        getline (levelFile,line);
+        int sizeX = std::stoi(line);
+        getline (levelFile,line);
+        int sizeY = std::stoi(line);
+        setSize(sizeX, sizeY);
+
+        getline (levelFile,line);
+        int startRoomIndex = std::stoi(line);
+        getline (levelFile,line);
+        int endRoomIndex = std::stoi(line);
+        setSize(sizeX, sizeY);
+        setStartAndEndRoomIndex(startRoomIndex, endRoomIndex);
+        for (int s = 0; s < sizeX*sizeY; s++) {
+            getline (levelFile,line);
+            maze.push_back(&areas[std::stoi(line)]);
         }
         levelFile.close();
     }
