@@ -11,7 +11,9 @@ void Game::init()
     loadAreas();
     createMaze();
     //setStartAndEndRoomIndex(2, 3);
-    createItem();
+    //createItem();
+    loadItems();
+    createRoomInventories();
     player.setPosition(startRoomIndex);
 }
 
@@ -83,6 +85,49 @@ void Game::loadAreas()
     areas.emplace_back("open to north, south", Area::open, Area::closed, Area::open, Area::closed);
     areas.emplace_back("open to north, west", Area::open, Area::closed, Area::closed, Area::open);
     areas.emplace_back("open to south, west", Area::closed, Area::closed, Area::open, Area::open);
+}
+
+void Game::loadItems() {
+    //Item(const std::string& name, const int& weight, const bool& edible, const int& healthModifier);
+    items.emplace_back("banana", 1, true, 2);
+    items.emplace_back("melon", 5, true, 1);
+    items.emplace_back("pineapple", 2, true, 3);
+    items.emplace_back("poison", 1, true, -10);
+}
+
+bool Game::isItemInItems(std::string name) {
+    for (auto& item: items) {
+        if ( item.getName() == name) {
+            return true;
+        }
+    }
+    return false;
+}
+
+Item& Game::getItem(std::string name) {
+    for (auto& item: items) {
+        if ( item.getName() == name) {
+            return item;
+        }
+    }
+}
+
+void Game::createRoomInventories() {
+    for (int i = 0; i < xSize*ySize; ++i) {
+        Inventory inventory(1000);
+        roomInventories.push_back(&inventory);
+        //roomInventories[i] = Inventory(1000);
+    }
+    roomInventories[6]->add(items[0]);
+    roomInventories[6]->add(items[0]);
+    roomInventories[6]->add(items[1]);
+    roomInventories[6]->add(items[2]);
+    roomInventories[3]->add(items[3]);
+
+    /*roomInventories[6].add(items[0]);
+    roomInventories[6].add(items[1]);
+    roomInventories[6].add(items[2]);
+    roomInventories[3].add(items[3]);*/
 }
 
 void Game::printHelp() {
@@ -368,10 +413,22 @@ void Game::handleUserInput() {
         return;
     } else if (firstWord == "p" || firstWord == "pickup") {
         //TODO make separate function for pickup
-        for (auto &item : items){
+        if ( isItemInItems(restWords) ) {
+            Item item = getItem(restWords);
+            if ( roomInventories[player.getPosition()]->isItemInInventory(item) ) {
+                player.getInventory()->add(item);
+                std::cout<<item.getName()<<" picked up."<<std::endl;
+                player.showInventory();
+            } else {
+                std::cout<<"No "<<item.getName()<<" in this room."<<std::endl;
+            }
+        } else {
+            std::cout<<"No "<<restWords<<" in the room."<<std::endl;
+        }
+        /*for (auto &item : items){
             if (item.getName() == restWords) {
                 if (item.getPosition() == player.getPosition()) {
-                    player.getInventory()->pickUpItem(item);
+                    //player.getInventory()->pickUpItem(item);
                     std::cout<<item.getName()<<" picked up."<<std::endl;
                     player.showInventory();
                     break;
@@ -380,16 +437,20 @@ void Game::handleUserInput() {
                 break;
             }
             std::cout<<"No "<<restWords<<" in the room."<<std::endl;
-        }
+        }*/
     } else if (firstWord == "i" || firstWord == "inventory") {
         player.showInventory();
     } else if (firstWord == "m" || firstWord == "map") {
         showMap();
+    } else if (firstWord == "e" || firstWord == "eat") {
+        player.eat(restWords);
     }
 }
 
+/*
 void Game::createItem() {
-    items.emplace_back("key", 3, 2);
+    items.emplace_back("key", 3, 2, false, 0);
+    items.emplace_back("banana", 6, 1, true, 1);
 }
 
 std::vector<Item> Game::getItems(int& pos) const {
@@ -401,15 +462,16 @@ std::vector<Item> Game::getItems(int& pos) const {
     }
     return itemsInRoom;
 }
+*/
 
-void Game::printItemsInRoom(std::vector<Item> items) {
+void Game::printItemsInRoom(int p) {
     cout << "Items: ";
-    if (items.empty()) {
+    if ( roomInventories[p]->getWeight() == 0) {
         cout << "no item in this room\n";
         return;
     }
-    for (Item item : items) {
-        cout << item.getName() << endl;
+    for (std::map<Item*,int>::iterator it=roomInventories[p]->getInventory()->begin(); it!=roomInventories[p]->getInventory()->end(); ++it) {
+        std::cout << it->first << ": " << it->second << '\n';
     }
 }
 
@@ -432,7 +494,7 @@ bool Game::step() {
         int pos = player.getPosition();
         std::cout<<"You are now in room nr "<<pos<<std::endl;//", "<<areas[pos].getDescription()<< std::endl;
         player.setRoomVisited(pos);//areas[pos].setVisited();
-        printItemsInRoom(getItems(pos));
+        printItemsInRoom(pos);
         //const int* dirs = areas[pos].getValidDirs();
         std::cout<<"You can go to ";
         if (maze[pos]->toNorth) std::cout << " north";

@@ -10,14 +10,17 @@ using namespace std;
 
 class Game {
 public:
+    Game() {};
     void init();
     void run();
     void createItem();
     std::vector<Item> getItems(int& pos) const;
-    void printItemsInRoom(std::vector<Item> items);
+    void printItemsInRoom(int);
     void setSize(int, int);
     void setStartAndEndRoomIndex(int, int);
     void createMaze();
+    void loadItems();
+    void createRoomInventories();
 
 private:
     vector<Area> areas; // areas has only non-changeable information
@@ -26,17 +29,21 @@ private:
     int startRoomIndex;
     int endRoomIndex;
     std::vector<Area*> maze;
+    std::vector<Item> items;
+    std::vector<Inventory*> roomInventories;
+    //Inventory roomInventories[];
 
     void loadAreas();
     bool step();
     void handleUserInput();
     void moveTo(const std::string& dir);
     void printHelp();
-    std::vector<Item> items;
     void moveDirection(int dir);
     std::string removeWhitespace(std::string str);
     void showMap();
     void printRoomRow(int);
+    bool isItemInItems(std::string);
+    Item& getItem(std::string);
 };
 
 

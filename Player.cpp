@@ -16,14 +16,14 @@ Inventory* Player::getInventory() { return inventory; }
 
 void Player::showInventory() {
     std::cout<<"Inventory: ";
-    if (inventory->getItems().size() == 0) {
+    if (inventory->getWeight()  == 0) {
         std::cout<<"empty";
     }
     //TODO show size/remaining space
-    for (Item item: inventory->getItems() ) {
-        std::cout<<item.getName()<<" ";
+    for (std::map<Item*,int>::iterator it=getInventory()->getInventory()->begin(); it!=getInventory()->getInventory()->end(); ++it) {
+        std::cout << it->first << ": " << it->second << '\n';
     }
-    std::cout<<std::endl;
+    std::cout<<"\nYour health is: "<<getHealth()<<std::endl;
 }
 
 void Player::setRoomVisited(int roomIndex) {
@@ -39,4 +39,22 @@ bool Player::isRoomVisited(int roomIndex) {
         if (index == roomIndex) return true;
     }
     return false;
+}
+
+int Player::getHealth() { return this->health; }
+
+void Player::modifyHealth(int modifier) {
+    this->health += modifier;
+}
+
+void Player::eat(std::string& food) {
+/*
+    for (Item item: inventory->getItems() ) {
+        if ( item.getName() == food ) {
+            if ( item.isEdible() ) {
+
+            }
+        }
+    }
+*/
 }

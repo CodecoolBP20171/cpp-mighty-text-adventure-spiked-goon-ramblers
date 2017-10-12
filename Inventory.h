@@ -9,10 +9,35 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
+#include <map>
 
 class Inventory {
 
 public:
+    Inventory(int);
+
+    bool isItemInInventory(Item&);
+
+    int numberOfItemsIn(Item&);
+
+    Item* findItemInInventory(std::string);
+
+    void add(Item&);
+
+    void remove(Item&);
+
+    int getCapacity();
+
+    int getWeight();
+
+    std::map<Item*, int>* getInventory();
+
+private:
+    std::map<Item*, int> inventory;
+    int capacity;
+    int weight = 0;
+
+/*public:
     Inventory(int);
 
     std::vector<Item> getItems() const;
@@ -24,7 +49,7 @@ public:
 private:
     int capacity;
     int weight;
-    std::vector<Item> inventoryItems;
+    std::vector<Item> inventoryItems;*/
 };
 
 

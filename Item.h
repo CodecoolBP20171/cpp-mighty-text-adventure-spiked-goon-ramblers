@@ -10,20 +10,26 @@
 class Item {
 
 public:
-    Item(const std::string& name, const int& position, const int& weight);
+    Item(const std::string& name, const int& weight, const bool& edible, const int& healthModifier);
 
     std::string getName() const;
 
-    int getPosition() const;
+    //int getPosition() const;
 
-    void setPosition(int pos);
+    //void setPosition(int pos);
 
-    int getWeigth() const;
+    int getWeight() const;
+
+    bool isEdible();
+
+    int getHealthModifier();
 
 private:
-    std::string name;
-    int position;
-    int weight;
+    const std::string name;
+    //int position;
+    const int weight;
+    const bool edible;
+    const int healthModifier;
 };
 
 
