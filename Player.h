@@ -18,11 +18,14 @@ public:
     void setRoomVisited(int);
     std::vector<int> getRoomsVisited();
     bool isRoomVisited(int);
+    int getHealth();
+    void modifyHealth(int);
 
 private:
     int position;
     Inventory* inventory = new Inventory(20);
     std::vector<int> roomsVisited;
+    int health = 10;
 };
 
 

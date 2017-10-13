@@ -40,3 +40,11 @@ bool Player::isRoomVisited(int roomIndex) {
     }
     return false;
 }
+
+int Player::getHealth() {
+    return this->health;
+}
+
+void Player::modifyHealth(int mod) {
+    this->health += mod;
+}

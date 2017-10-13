@@ -102,18 +102,22 @@ void Game::printHelp() {
 void Game::moveDirection(int dir) {
     if (dir == Area::north && maze[player.getPosition()]->toNorth) {
         player.setPosition(player.getPosition()-xSize);
+        player.modifyHealth(-1);
         return;
     }
     if (dir == Area::east && maze[player.getPosition()]->toEast) {
         player.setPosition(player.getPosition()+1);
+        player.modifyHealth(-1);
         return;
     }
     if (dir == Area::south && maze[player.getPosition()]->toSouth) {
         player.setPosition(player.getPosition()+xSize);
+        player.modifyHealth(-1);
         return;
     }
     if (dir == Area::west && maze[player.getPosition()]->toWest) {
         player.setPosition(player.getPosition()-1);
+        player.modifyHealth(-1);
         return;
     }
     return;
@@ -423,14 +427,18 @@ void Game::run()
     //areas[player.getPosition()].setVisited();
     player.setRoomVisited(player.getPosition());
     showMap();
-
-    std::cout<<"Congratulations, you have reached the End room and won the game!"<<std::endl;
+    if (player.getHealth() > 0) {
+        std::cout<<"Congratulations, you have reached the End room and won the game!"<<std::endl;
+    } else {
+        std::cout<<"You have not reached the End room alive, you have lost the game!"<<std::endl;
+    };
 }
 
 bool Game::step() {
     do {
         int pos = player.getPosition();
         std::cout<<"You are now in room nr "<<pos<<std::endl;//", "<<areas[pos].getDescription()<< std::endl;
+        std::cout<<"Your health is "<<player.getHealth()<<std::endl;
         player.setRoomVisited(pos);//areas[pos].setVisited();
         printItemsInRoom(getItems(pos));
         //const int* dirs = areas[pos].getValidDirs();
@@ -453,7 +461,7 @@ bool Game::step() {
         std::cout<<dir<<std::endl;
         */
         handleUserInput();
-    } while (player.getPosition() != endRoomIndex);
+    } while (player.getPosition() != endRoomIndex && player.getHealth() > 0);
     return true;
 }
 
